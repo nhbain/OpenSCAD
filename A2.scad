@@ -14,15 +14,17 @@ main ();
 module main ()
 {
     roundness = 1.5;
-    size = 100;
+    size = 60;
     buffer = 5;
     ghost();
     top(roundness, size, buffer);
     bottom(roundness, -size, -buffer);
-    pegs(size);
+    //pegs(size);
     //cube ([width,length,height]);
     //rotate([0,0,0])
         //cylinder(25, 25, 6, $fn=3); // Triangular prism
+    //top_slider(size, buffer);
+    
     color("red")
         translate([size/2,size/2,(size/3)])
             *cylinder(size/3, size/3, 0, $fn=4);
@@ -67,22 +69,26 @@ module shell(roundness, size)
 
 module top(roundness, size, buffer)
 {
-    translate([buffer, buffer,(-size/2)])
+    translate([buffer, buffer,(-size/2)]){
     //color("red")
         //translate([0,0,0])
-            
-    difference()
-    {
-        shell(roundness, size);
-        
-        translate([-(size/2), -(size/2),-((size/2))])
-            cube([(size*2), (size*2), size]);
-        
-        translate([size/2,size/2,(size)])
-            cube([size/3, size/3, size/3], true);
-        
-        translate([size/2, size/2, size/2])
-                sphere(abs(size/3.5));
+        union(){
+            difference()
+            {
+                shell(roundness, size);
+                
+                translate([-(size/2), -(size/2),-((size/2))])
+                    cube([(size*2), (size*2), size]);
+                
+                translate([size/2,size/2,(size)])
+                    cube([size/3, size/3, size/3], true);
+                
+                translate([size/2, size/2, size/2])
+                        sphere(abs(size/3.5));
+                
+            }
+            top_slider(size,buffer);
+        }
     }
 }
 
@@ -101,26 +107,38 @@ module bottom(roundness, size, buffer)
         
         translate([size/2, size/2, size/2])
                 sphere(abs(size/3.5));
+        
+        bottom_slider(size,buffer);
             //cube([abs(size/6), abs(size/6), abs(size/6)]);       
     }
 }
 
-module pegs(size)
+module top_slider(size, buffer)
 {
-   color("red")
-    translate([size/4, size/4, -(size/10)])
+    difference()
     {
-        rotate(a = 270, v = [0,0,4])
-            cylinder(h=size/10, r=.03*size, center=false);
+        translate([(size/1.35), (size/3.85), size/2 - size/30])
+            rotate([0,0,45])
+                cube([size/1.4, size/18, size/15], true);
         
-        for(r = [0:90:270])
-        {
-            rotate(a = r, v =[0,0,1])
-                cylinder(h=size/10, r=.03*size, center=false);
-        }
+        translate([(size/1.35 - size/50), (size/3.85), (size/2 - size/45) ])
+            rotate([0,0,45])
+                cube([size/1.3, size/25, size/22], true);
     }
+}
+
+module bottom_slider(size, buffer)
+{
+    difference()
+    {
+        translate([(size/1.35), (size/3.85), size/2 - size/30])
+            rotate([0,0,45])
+                cube([abs(size/1), abs(size/18), abs(size/15)], true);
         
-    
+        translate([(size/1.35 - size/50), (size/3.85), (size/2 - size/45) ])
+            rotate([0,0,45])
+                cube([abs(size/1), abs(size/25), abs(size/22)], true);
+    }
 }
 
 module ghost ()
