@@ -7,12 +7,6 @@ Usage: This is modeled after the Borsalino sculpture created by Henk van Putten.
 
 Changing the side parameter directly affects the radius of the sweeps. So, only this parameter needs to be changed if you desire a different size model.
 */
-// Libraries from https://github.com/openscad/scad-utils ----------------------------------------
-use <sweep.scad>
-use <scad-utils/transformations.scad>
-use <scad-utils/shapes.scad>
-use <scad-utils/morphology.scad>
-// ----------------------------------------
 
 // Modules ----------------------------------------
 main ();
@@ -25,10 +19,10 @@ module main ()
     R = r + sqrt(2)*r; //sweep radius of the medial axis of the connector.
     //endcap(side);
     //male_sleeve(side);
-    // connector(side, r, R);
+    //connector(side, r, R);
     //rhombic_extender(side);
-    twisted_connector(side);
-    //knot_module(side);
+    //twisted_connector(side);
+    knot_module(side);
     //rhombic_endcap(side);
 }
 
@@ -86,7 +80,7 @@ module endcap(side)
             female(side);
             
             translate([.125*side*.5,  -(.125*side*.5) -( side- (.125*side))  ,  ( 2*side - .08*side)])
-            #female(side);
+            female(side);
             
         }
  }
@@ -198,10 +192,10 @@ module male_sleeve(side)
         difference(){
             union(){
                 rotate([0,90,0])
-                translate([-side, side, -side/8])
+                translate([-side, side, -side/4])
                 difference(){
-                    cylinder(r=side, h=side/8, $fn=16);
-                    cylinder(r=side - (side/2), h=side/8, $fn=16);
+                    cylinder(r=side, h=side/4, $fn=16);
+                    cylinder(r=side - (side/2), h=side/4, $fn=16);
                 }
                 sixteengon_bend(side);
                 rotate([0,90,-30])
@@ -209,7 +203,7 @@ module male_sleeve(side)
                 cylinder(r=side- (.125*side), h= .15*side, $fn=16);
             }
             rotate([0,90,0])
-            translate([-side, side, -.15*side])
+            translate([-side, side, -.26*side])
             cylinder(r=side- (.125*side), h= .15*side, $fn=16);
         }
  }
